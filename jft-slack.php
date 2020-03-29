@@ -1,15 +1,19 @@
 <?php
+/*
+ * JFT Slack
+ * Sends the Just For Today to a slack channel.
+ */
 
 class Jft
 {
 
     public function sendJftToSlack($token, $channel)
     {
-        $data = $this->get_jft();
+        $data = $this->getJft();
         return $this->generateSlackHook($token, $channel, $data);
     }
 
-    public function get_jft()
+    public function getJft()
     {
         $jft_url = 'https://jftna.org/jft/';
         libxml_use_internal_errors(true);
@@ -21,15 +25,14 @@ class Jft
         $d->loadHTML($url);
 
         $jftKeys = array('date', 'title', 'page', 'quote', 'source', 'content', 'thought', 'copyright');
+        
         $i = 0;
-        $k = 1;
-
         $jftArray = [];
 
         foreach ($d->getElementsByTagName('tr') as $element) {
             if ($i != 5) {
-                $formated_element = trim($element->nodeValue);
-                $jftArray[$jftKeys[$i]] = $formated_element;
+                $formatedElement = trim($element->nodeValue);
+                $jftArray[$jftKeys[$i]] = $formatedElement;
             } else {
                 $dom = new DOMDocument();
                 $dom->loadHTML($this->get($jft_url));
@@ -47,8 +50,8 @@ class Jft
                     }
                     $values[] = $row_values;
                 }
-                $break_array = preg_replace('/<br[^>]*>/i', ' ', $values[5]);
-                $jftArray["content"] = $break_array[0];
+                $breakArray = preg_replace('/<br[^>]*>/i', ' ', $values[5]);
+                $jftArray["content"] = strip_tags($breakArray[0]);
             }
             $i++;
         }
@@ -70,7 +73,7 @@ class Jft
                 ],
                 [
                     "title" => $jft["quote"],
-                    "value" => $jft["source"] . "\n\n\n" . strip_tags($jft["content"]) . "\n\n\n" . $jft["thought"],
+                    "value" => $jft["source"] . "\n\n\n" . $jft["content"] . "\n\n\n" . $jft["thought"],
                     "short" => false
                 ]
             ),
@@ -116,3 +119,6 @@ class Jft
 
 $sendJft = new Jft;
 $sendJft->sendJftToSlack('GHSEJFNLWEASFDwefdsbhjkMv7xB9cTUMiD6QDytel', 'just-for-today');
+/*
+ * This takes two arguments first a slack incoming webhook api token and second the channel to which we want to send to
+ */
