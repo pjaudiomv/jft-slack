@@ -10,5 +10,5 @@ $sendJft->sendJftToSlack('JHGVJDShjbdSFDwefdsbhjkhkfbsvRJFSJNEADalqp', 'just-for
 $sendJft->sendJftToSlack('EROSFVJNSDJNDDwefdsbhjkMvwefWJFNJNWFNJAEqw', 'just-for-today'); # BMLT
 ```
 
-This takes two arguments first a slack incoming webhook api token and second the channel to which we want to send to 
-you can send to as many workspaces and channels as you want.
+This takes two arguments first a slack incoming webhook api token and second the channel to which we want to send to. 
+You can send to as many workspaces and channels as you want.
